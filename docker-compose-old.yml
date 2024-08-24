@@ -1,0 +1,57 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build: ./server
+    ports:
+      - "5001:5001"
+    expose:
+      - 5001
+    networks:
+      - mern-app
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    links:
+      - mongo
+
+  web:
+    build: ./client
+    ports:
+      - "3000:80"
+    networks:
+      - mern-app
+    volumes:
+      - ./client/:/app
+      - /app/node_modules
+    links:
+      - api
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - api
+      - web
+
+networks:
+  mern-app:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
