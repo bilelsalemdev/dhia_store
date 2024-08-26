@@ -176,9 +176,11 @@ exports.updateProfile = AsyncHandler(async (req, res, next) => {
 				})
 			}
 
+
 			if (
 				(file.mimetype === 'image/png' ||
 					file.mimetype === 'image/jpg' ||
+					file.mimetype === 'image/webp' ||
 					file.mimetype === 'image/jpeg') &&
 				!file.truncated
 			) {

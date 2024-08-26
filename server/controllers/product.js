@@ -121,7 +121,7 @@ exports.createProduct = AsyncHandler(async (req, res, next) => {
 		}
 
 		if (images.length === 0) {
-			return next(new ErrorHandler('Only .png, .jpg and .jpeg format allowed!', 400))
+			return next(new ErrorHandler('Only .png, .jpg, webp and .jpeg format allowed!', 400))
 		}
 
 		req.body.images = images
@@ -140,6 +140,7 @@ exports.createProduct = AsyncHandler(async (req, res, next) => {
 		if (
 			(file.mimetype === 'image/png' ||
 				file.mimetype === 'image/jpg' ||
+				file.mimetype === "image/webp" ||
 				file.mimetype === 'image/jpeg') &&
 			!file.truncated
 		) {
@@ -224,7 +225,7 @@ exports.updateProduct = AsyncHandler(async (req, res, next) => {
 			}
 
 			if (images.length === 0) {
-				return next(new ErrorHandler('Only .png, .jpg and .jpeg format allowed!', 400))
+				return next(new ErrorHandler('Only .png, .jpg, webp and .jpeg format allowed!', 400))
 			}
 
 			req.body.images = images
