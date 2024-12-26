@@ -1,6 +1,12 @@
 pipeline {
     agent any
     stages {
+        stage('Check Docker Path') {
+            steps {
+                sh 'echo $PATH'
+            }
+        }
+        
         stage('Build') {
             steps {
                 sh 'docker build -t myapp:${BUILD_NUMBER} .'
