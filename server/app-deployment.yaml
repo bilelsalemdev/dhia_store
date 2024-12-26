@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: bilelsalemdev/my-app:latest # Replace this with your Docker image
+          image: bilelsalemdev/my-app:latest
           ports:
             - containerPort: 3000
           env:
