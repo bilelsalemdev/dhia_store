@@ -28,7 +28,7 @@ exports.productValidator = [
 ]
 
 exports.productReviewValidator = [
-	check('rating').not().isEmpty().withMessage('Please enter product rating'),
+	// check('rating').not().isEmpty().withMessage('Please enter product rating'),
 
 	check('comment').not().isEmpty().withMessage('Please enter product comment'),
 

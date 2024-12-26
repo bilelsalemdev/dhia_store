@@ -23,10 +23,7 @@ const productSchema = new mongoose.Schema(
 			type: String,
 			required: false,
 		},
-		ratings: {
-			type: Number,
-			default: 0,
-		},
+
 		images: [
 			{
 				filename: {
@@ -70,10 +67,6 @@ const productSchema = new mongoose.Schema(
 				},
 				avatar: {
 					type: String,
-					required: true,
-				},
-				rating: {
-					type: Number,
 					required: true,
 				},
 				comment: {
