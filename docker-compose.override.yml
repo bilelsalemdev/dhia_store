@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  client:
+    ports:
+      - "3000:3000"  # Map the development server port
+    volumes:
+      - ./client:/usr/src/app/client  # Bind mount for source code
+      - /usr/src/app/client/node_modules  # Preserve node_modules inside the container
+    command: sh -c "npm install && npm start"  # Run the development server

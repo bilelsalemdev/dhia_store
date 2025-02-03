@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
-import Footer from './components/Footer'
 import Products from './screens/product/Products'
 import Login from './screens/auth/Login'
 import Register from './screens/auth/Register'
@@ -98,7 +97,6 @@ const App = () => {
 						</Route>
 					</Routes>
 				</main>
-				<Footer />
 			</Router>
 
 			<ToastContainer />

@@ -57,7 +57,7 @@ app.use(notFound)
 app.use(errors)
 
 // Start server
-const port = process.env.PORT || 5001
+const port =5001 ||  process.env.PORT 
 const server = app.listen(port, () => {
 	console.log(`Server started on port ${port} in ${process.env.NODE_ENV} mode.`)
 })
