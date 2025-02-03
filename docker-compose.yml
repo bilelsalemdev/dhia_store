@@ -7,7 +7,10 @@ services:
       dockerfile: Dockerfile
     container_name: client_app
     ports:
-      - "3000:80"  # Map container port 80 (Nginx serving frontend) to localhost:3000
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    volumes:
+      - ./client:/usr/src/app/client  # Bind mount for source code
+      - /usr/src/app/client/node_modules  # Preserve node_modules inside the container
     networks:
       - app_network
 
@@ -17,20 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: server_app
     ports:
-      - "5001:5001"  # Map container port 5001 to localhost:5001
-    networks:
-      - app_network
-
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: nginx_proxy
-    ports:
-      - "80:80"  # Map Nginx container port 80 to localhost (http://localhost)
-    depends_on:
-      - client
-      - server
+      - ${SERVER_PORT}:${SERVER_PORT}
     networks:
       - app_network
 
@@ -42,7 +32,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: mydb
     ports:
-      - "27017:27017"
+      - ${MONGO_PORT}:${MONGO_PORT}
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -52,7 +42,7 @@ services:
     image: dockette/adminer
     restart: always
     ports:
-      - "8087:80" 
+      - ${ADMINER_PORT}:8081
     networks:
       - app_network
 
