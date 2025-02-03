@@ -30,7 +30,7 @@ generateAdmin()
 // Create App
 const app = express()
 const corsOptions = {
-	origin: ["http://localhost:3000"],
+	origin: ["http://localhost:3000", "https://dhia.therapynimbus.com"],
 	credentials: true,
 }
 // Middleware
