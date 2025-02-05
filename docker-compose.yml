@@ -1,3 +1,58 @@
+# version: "3.8"
+
+# services:
+#   client:
+#     build:
+#       context: ./client
+#       dockerfile: Dockerfile
+#     container_name: client_app
+#     ports:
+#       - ${CLIENT_PORT}:${CLIENT_PORT}
+#     volumes:
+#       - ./client:/usr/src/app/client  # Bind mount for source code
+#       - /usr/src/app/client/node_modules  # Preserve node_modules inside the container
+#     networks:
+#       - app_network
+
+#   server:
+#     build:
+#       context: ./server
+#       dockerfile: Dockerfile
+#     container_name: server_app
+#     ports:
+#       - ${SERVER_PORT}:${SERVER_PORT}
+#     networks:
+#       - app_network
+
+#   db:
+#     image: mongo:6
+#     container_name: mongodb
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: root
+#       MONGO_INITDB_ROOT_PASSWORD: example
+#       MONGO_INITDB_DATABASE: mydb
+#     ports:
+#       - ${MONGO_PORT}:${MONGO_PORT}
+#     volumes:
+#       - mongodb_data:/data/db
+#     networks:
+#       - app_network
+
+#   adminer_mongo:
+#     image: dockette/adminer
+#     restart: always
+#     ports:
+#       - ${ADMINER_PORT}:8081
+#     networks:
+#       - app_network
+
+# volumes:
+#   mongodb_data:
+
+# networks:
+#   app_network:
+#     driver: bridge
+
 version: "3.8"
 
 services:
@@ -5,12 +60,20 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+        - BUILD_NUMBER=${BUILD_NUMBER}
+        - DANGEROUSLY_DISABLE_HOST_CHECK=${DANGEROUSLY_DISABLE_HOST_CHECK}
     container_name: client_app
     ports:
-      - ${CLIENT_PORT}:${CLIENT_PORT}
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
     volumes:
-      - ./client:/usr/src/app/client  # Bind mount for source code
-      - /usr/src/app/client/node_modules  # Preserve node_modules inside the container
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - BUILD_NUMBER=${BUILD_NUMBER}
+      - DANGEROUSLY_DISABLE_HOST_CHECK=${DANGEROUSLY_DISABLE_HOST_CHECK}
     networks:
       - app_network
 
@@ -20,19 +83,33 @@ services:
       dockerfile: Dockerfile
     container_name: server_app
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${SERVER_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_TIME=${JWT_EXPIRES_TIME}
+      - JWT_REST_PASSWORD=${JWT_REST_PASSWORD}
+      - COOKIE_EXPIRES_TIME=${COOKIE_EXPIRES_TIME}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - EMAIL_TO=${EMAIL_TO}
+      - EMAIL_FROM=${EMAIL_FROM}
     networks:
       - app_network
+    depends_on:
+      - db
 
   db:
     image: mongo:6
     container_name: mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: mydb
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     ports:
-      - ${MONGO_PORT}:${MONGO_PORT}
+      - "${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -40,11 +117,14 @@ services:
 
   adminer_mongo:
     image: dockette/adminer
+    container_name: adminer
     restart: always
     ports:
-      - ${ADMINER_PORT}:8081
+      - "${ADMINER_PORT}:8081"
     networks:
       - app_network
+    depends_on:
+      - db
 
 volumes:
   mongodb_data:

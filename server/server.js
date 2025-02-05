@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const { readdirSync } = require("fs");
 const express = require("express");
 const morgan = require("morgan");
-const dotenv = require("dotenv");
 const path = require("path");
 var cors = require("cors");
 
@@ -17,9 +16,6 @@ process.on("uncaughtException", (err) => {
   console.log("Shutting down due to Uncaught Exception");
   process.exit(1);
 });
-
-// Config Env Path
-dotenv.config({ path: "config/.env" });
 
 // Connect database
 connectDatabase();
